@@ -1,10 +1,11 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { SystemThemeProvider } from "./contexts";
+import { Router } from "./Router";
 
 export const App: React.FC = () => {
 	return (
-		<View>
-			<Text>NF-Reader</Text>
-		</View>
+		<SystemThemeProvider>
+			<Router />
+		</SystemThemeProvider>
 	);
 };
