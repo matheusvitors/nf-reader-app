@@ -3,8 +3,7 @@ import { ThemeProvider } from "styled-components/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { KEY } from "@/config/storage-keys";
 import { useSystemTheme } from "@/hooks";
-import dark from "@/styles/themes/dark";
-import light from "@/styles/themes/light";
+import { light, dark } from "@/styles/themes";
 
 interface ThemeContextProps {
 	theme: string;

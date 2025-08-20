@@ -1,5 +1,5 @@
 import React from "react";
-import { NativeStackNavigationOptions, NativeStackNavigationProp, createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NativeStackNavigationProp, createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
 import { StatusBar } from "react-native";

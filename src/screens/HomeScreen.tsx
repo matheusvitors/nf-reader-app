@@ -1,10 +1,64 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useEffect } from "react";
+import { FlatList } from "react-native";
+import styled from "styled-components/native";
+import { useQuery } from "@tanstack/react-query";
+import { Screen } from "@/layouts";
+import { listNotasFiscais } from "@/services";
+import { Button, EmptyArea, ListItem, Loader, ScreenMessage } from "@/components";
+import { NotaFiscal } from "@/interfaces";
 
 export const HomeScreen: React.FC = () => {
+	const {
+		data: notasFiscais,
+		isFetching,
+		error,
+		refetch,
+		isStale,
+	} = useQuery({
+		queryKey: ["notasFiscais"],
+		queryFn: listNotasFiscais,
+	});
+
+	useEffect(() => {
+		notasFiscais && console.log('notasFiscais', notasFiscais)
+	}, [notasFiscais])
+
+	useEffect(() => {
+		error && console.log(error)
+	}, [error])
+
 	return (
-		<View>
-			<Text>NF-Reader</Text>
-		</View>
+		<Screen>
+			<Content>
+				{isFetching && <Loader size={"large"} />}
+
+				{!isFetching && notasFiscais && notasFiscais.length > 0 &&
+					<FlatList
+						data={notasFiscais}
+						renderItem={({item}) => <ListItem item={item} />}
+						keyExtractor={(item: NotaFiscal) => `${item.id}`}
+						refreshing={isFetching}
+						onRefresh={refetch}
+						style={{ marginTop: 10, marginBottom: 10, flex: 1, width:'100%' }}
+						contentContainerStyle={{flex: 1, alignItems: 'center'}}
+					/>
+				}
+
+				{!isFetching && !notasFiscais && <EmptyArea>
+					<ScreenMessage message='Não há notas fiscais cadastradas.' Button={<Button type='outline' label='Atualizar' loading={isFetching} onPress={refetch} />} />
+				</EmptyArea> }
+			</Content>
+		</Screen>
 	);
 };
+
+const Content = styled.View`
+	flex: 1;
+	align-items: center;
+	justify-content: center;
+
+	width: 100%;
+	height: 100%;
+
+	padding-bottom: 10px;
+`;

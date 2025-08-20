@@ -30,6 +30,8 @@ declare module 'styled-components/native' {
 			info: string
 		},
 
+		icon: string;
+
 		button: {
 			background: string,
 			text: string,
