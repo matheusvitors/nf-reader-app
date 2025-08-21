@@ -1,19 +1,25 @@
-import Feather from '@react-native-vector-icons/feather';
 import React from 'react';
+import Feather from '@react-native-vector-icons/feather';
 import styled, { useTheme } from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
 import { useSystemTheme } from '@/hooks';
+import { RootStackScreenProps } from '@/Router';
 
 interface HeaderProps {
 	title?: string;
+	intialPage: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ title = 'NF Reader'}) => {
+export const Header: React.FC<HeaderProps> = ({ title = 'NF Reader', intialPage = false}) => {
 	const theme = useTheme();
-	const { theme: systemTheme, changeTheme } = useSystemTheme()
+	const { theme: systemTheme, changeTheme } = useSystemTheme();
+	const navigation = useNavigation<RootStackScreenProps>()
 
 	return (
 		<Container>
-			<Left></Left>
+			<Left>
+				{!intialPage && <Feather name='arrow-left' size={26} color={theme.common.text} onPress={() => navigation.goBack()}/>}
+			</Left>
 			<Center>
 				<Title>{title}</Title>
 			</Center>

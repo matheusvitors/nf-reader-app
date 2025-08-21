@@ -27,15 +27,24 @@ export const HomeScreen: React.FC = () => {
 		error && console.log(error)
 	}, [error])
 
+	const handleDelete = async (id: string) => {
+		try {
+			console.log('delete', id);
+
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
 	return (
-		<Screen>
+		<Screen initialPage>
 			<Content>
 				{isFetching && <Loader size={"large"} />}
 
 				{!isFetching && notasFiscais && notasFiscais.length > 0 &&
 					<FlatList
 						data={notasFiscais}
-						renderItem={({item}) => <ListItem item={item} />}
+						renderItem={({item}) => <ListItem item={item} handleDelete={handleDelete} />}
 						keyExtractor={(item: NotaFiscal) => `${item.id}`}
 						refreshing={isFetching}
 						onRefresh={refetch}

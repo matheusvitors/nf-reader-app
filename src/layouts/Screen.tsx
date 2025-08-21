@@ -7,9 +7,10 @@ import styled, { css, useTheme } from 'styled-components/native';
 interface ScreenProps {
 	title?: string;
 	children: ReactNode;
+	initialPage?: boolean;
 }
 
-export const Screen: React.FC<ScreenProps> = ({children, title}) => {
+export const Screen: React.FC<ScreenProps> = ({children, title, initialPage = false}) => {
 	const insets = useSafeAreaInsets();
 	const theme = useTheme();
 
@@ -19,12 +20,12 @@ export const Screen: React.FC<ScreenProps> = ({children, title}) => {
 			justifyContent: 'flex-start',
 			alignItems: 'center',
 			paddingTop: insets.top,
-			paddingBottom: insets.bottom,
+			marginBottom: insets.bottom,
 			paddingLeft: insets.left,
 			paddingRight: insets.right,
 			backgroundColor: theme.common.background
 		}}>
-			<Header title={title} />
+			<Header title={title} intialPage={initialPage} />
 			{children}
 		</View >
 	);

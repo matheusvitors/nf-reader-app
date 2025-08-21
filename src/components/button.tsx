@@ -1,7 +1,6 @@
 import React from 'react';
 import styled, { useTheme } from 'styled-components/native';
 import IconComponent from '@react-native-vector-icons/feather';
-import GM from '@react-native-vector-icons/feather';
 import { Loader } from '@/components';
 
 

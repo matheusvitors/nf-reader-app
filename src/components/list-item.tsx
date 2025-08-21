@@ -1,14 +1,18 @@
 import { IconButton } from '@/components/icon-button';
 import { NotaFiscal } from '@/interfaces';
+import { RootStackScreenProps } from '@/Router';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import styled, { useTheme } from 'styled-components/native';
 
 interface ListItemProps {
 	item: NotaFiscal;
+	handleDelete: (id: string) => void;
 }
 
-export const ListItem: React.FC<ListItemProps> = ({ item }) => {
+export const ListItem: React.FC<ListItemProps> = ({ item, handleDelete }) => {
 	const theme = useTheme();
+	const navigation = useNavigation<RootStackScreenProps>()
 
 	return (
 		<Container>
@@ -22,8 +26,8 @@ export const ListItem: React.FC<ListItemProps> = ({ item }) => {
 				</Down>
 			</Informations>
 			<Actions>
-				<IconButton icon='edit' size={20} backgroundColor='transparent' textColor={theme.semantic.attention} onPress={() => {}} />
-				<IconButton icon='trash' size={20} backgroundColor='transparent' textColor={theme.semantic.warning} onPress={() => {}} />
+				<IconButton icon='edit' size={20} backgroundColor='transparent' textColor={theme.semantic.attention} onPress={() => navigation.navigate('Form', item)} />
+				<IconButton icon='trash' size={20} backgroundColor='transparent' textColor={theme.semantic.warning} onPress={() => handleDelete(item.id)} />
 			</Actions>
 		</Container>
 	);
