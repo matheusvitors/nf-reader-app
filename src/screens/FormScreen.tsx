@@ -1,40 +1,82 @@
-import React, { useState } from 'react';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import styled from 'styled-components/native';
-import { Screen } from '@/layouts';
-import { RootStackParamsList, RootStackScreenProps } from '@/Router';
-import { Button, QRCodeButton, Text, TextInput } from '@/components';
+import React, { useEffect, useState } from "react";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import styled from "styled-components/native";
+import { Screen } from "@/layouts";
+import { RootStackParamsList, RootStackScreenProps } from "@/Router";
+import { Button, QRCodeButton, Text, TextInput } from "@/components";
+import { Alert } from "react-native";
+import { createNotaFiscal, editNotaFiscal } from "@/services";
+import { NotaFiscal } from "@/interfaces";
+import { parseData } from "@/utils/parseData";
+import DateTimePicker, { DateType, useDefaultStyles } from "react-native-ui-datepicker";
+import { format } from "date-fns";
 
 export const FormScreen: React.FC = () => {
-
-	const navigation = useNavigation<RootStackScreenProps>()
+	const navigation = useNavigation<RootStackScreenProps>();
 	const { params } = useRoute<RouteProp<RootStackParamsList, "Form">>();
+	const defaultStyles = useDefaultStyles();
 
-	const [description, setDescription] = useState(params?.description || '');
-	const [link, setLink] = useState(params?.link || '');
-	const [data, setData] = useState(params?.data ? new Date(params.data).toLocaleDateString('pt-BR') : '');
+	const [description, setDescription] = useState(params?.description || "");
+	const [link, setLink] = useState(params?.link || "");
+	const [data, setData] = useState<Date>(params?.data ? new Date(params.data) : new Date());
+	const [isLoading, setIsLoading] = useState(false);
+
+	useEffect(() => {
+		console.log('data', data?.toLocaleDateString())
+	}, [data])
+
+	const handleSave = async () => {
+		try {
+			console.log("data", format(data, 'yyyy-MM-dd'));
+
+			if(data) {
+				setIsLoading(true);
+				const input: NotaFiscal = {
+					id: params?.id || undefined,
+					description,
+					link,
+					data: format(data, 'yyyy-MM-dd'),
+					check: params?.check || false,
+				};
+				params ? await editNotaFiscal(input) : await createNotaFiscal(input);
+				navigation.navigate("Home");
+			}
+		} catch (error: any) {
+			console.error(error);
+			Alert.alert("Erro!", error.message);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	return (
 		<Screen title='Formulário'>
 			<Content>
-				<TextInput label='Descrição' value={description} onChangeText={() => { }} />
-				<TextInput label='Data' value={data} onChangeText={() => { }} />
+				<TextInput label='Descrição' value={description} onChangeText={(text) => setDescription(text)} />
+
+				<DateTimePicker
+					mode='single'
+					locale="pt-BR"
+					date={data} onChange={({ date }) => setData(date as Date)}
+					styles={defaultStyles}
+					style={{marginTop: 10, marginBottom: 20}}
+				/>
 				<LinkField>
-				<LinkInfo>
-					<Item>Link</Item>
-					<Item>{link}</Item>
-				</LinkInfo>
-				<ActionLink>
-					<QRCodeButton onPress={() => {}} />
-				</ActionLink>
+					<LinkInfo>
+						<Item>Link</Item>
+						<Item>{link}</Item>
+					</LinkInfo>
+					<ActionLink>
+						<QRCodeButton onPress={() => {}} />
+					</ActionLink>
 				</LinkField>
 			</Content>
 			<Footer>
-				<Button label='salvar' onPress={() => {}} />
+				<Button label='salvar' onPress={handleSave} loading={isLoading} />
 			</Footer>
 		</Screen>
 	);
-}
+};
 
 const Content = styled.View`
 	flex: 1;
@@ -56,23 +98,23 @@ const LinkField = styled.View`
 
 	width: 95%;
 	height: 70px;
-	margin-top: -15px;
-`
+	/* margin-top: -15px; */
+`;
 
 const LinkInfo = styled.View`
 	align-items: flex-start;
 	width: 80%;
-`
+`;
 
 const ActionLink = styled.View`
 	align-items: flex-end;
 	width: 20%;
-`
+`;
 
 const Item = styled.Text`
-	color: ${props => props.theme.textInput.text};
+	color: ${(props) => props.theme.textInput.text};
 	font-size: 16px;
-`
+`;
 
 const Footer = styled.View`
 	display: flex;
@@ -87,5 +129,5 @@ const Footer = styled.View`
 	padding-right: 10px;
 
 	position: absolute;
-	bottom: 0;
-`
+	bottom: 48px;
+`;

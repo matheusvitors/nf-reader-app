@@ -1,6 +1,6 @@
 import { StatusBarStyle } from "react-native"
 
-const primary = '#062460'
+const primary = '#220081ff'
 const secondary = '#D9ED92'
 const accent = '#93938C'
 const black = '#141414'

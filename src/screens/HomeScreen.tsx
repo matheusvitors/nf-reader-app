@@ -4,8 +4,13 @@ import styled from "styled-components/native";
 import { useQuery } from "@tanstack/react-query";
 import { Screen } from "@/layouts";
 import { listNotasFiscais } from "@/services";
-import { Button, EmptyArea, ListItem, Loader, ScreenMessage } from "@/components";
+import { Button, EmptyArea, ListItem, Loader, NewNFButton, ScreenMessage } from "@/components";
 import { NotaFiscal } from "@/interfaces";
+
+/**
+ *
+ * https://medium.com/@varunkukade999/qr-code-scanner-in-react-native-527577aa74b1
+ */
 
 export const HomeScreen: React.FC = () => {
 	const {
@@ -18,10 +23,6 @@ export const HomeScreen: React.FC = () => {
 		queryKey: ["notasFiscais"],
 		queryFn: listNotasFiscais,
 	});
-
-	useEffect(() => {
-		notasFiscais && console.log('notasFiscais', notasFiscais)
-	}, [notasFiscais])
 
 	useEffect(() => {
 		error && console.log(error)
@@ -56,6 +57,7 @@ export const HomeScreen: React.FC = () => {
 				{!isFetching && !notasFiscais && <EmptyArea>
 					<ScreenMessage message='Não há notas fiscais cadastradas.' Button={<Button type='outline' label='Atualizar' loading={isFetching} onPress={refetch} />} />
 				</EmptyArea> }
+				<NewNFButton />
 			</Content>
 		</Screen>
 	);

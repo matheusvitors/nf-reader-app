@@ -27,7 +27,7 @@ export const ListItem: React.FC<ListItemProps> = ({ item, handleDelete }) => {
 			</Informations>
 			<Actions>
 				<IconButton icon='edit' size={20} backgroundColor='transparent' textColor={theme.semantic.attention} onPress={() => navigation.navigate('Form', item)} />
-				<IconButton icon='trash' size={20} backgroundColor='transparent' textColor={theme.semantic.warning} onPress={() => handleDelete(item.id)} />
+				<IconButton icon='trash' size={20} backgroundColor='transparent' textColor={theme.semantic.warning} onPress={() => handleDelete(item.id!)} />
 			</Actions>
 		</Container>
 	);

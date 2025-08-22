@@ -1,7 +1,7 @@
 import { Header } from '@/components';
 import React, { ReactNode } from 'react';
 import { View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled, { css, useTheme } from 'styled-components/native';
 
 interface ScreenProps {
@@ -15,18 +15,30 @@ export const Screen: React.FC<ScreenProps> = ({children, title, initialPage = fa
 	const theme = useTheme();
 
 	return (
-		<View style={{
+		<SafeAreaView style={{
 			flex: 1,
 			justifyContent: 'flex-start',
 			alignItems: 'center',
-			paddingTop: insets.top,
-			marginBottom: insets.bottom,
-			paddingLeft: insets.left,
-			paddingRight: insets.right,
+			// marginBottom: insets.bottom,
+			// paddingTop: insets.top,
+			// paddingBottom: insets.bottom,
+			// paddingLeft: insets.left,
+			// paddingRight: insets.right,
 			backgroundColor: theme.common.background
 		}}>
 			<Header title={title} intialPage={initialPage} />
 			{children}
-		</View >
+			<Footer />
+		</SafeAreaView >
 	);
 }
+
+
+const Footer = styled.View`
+
+	height: 70px;
+	width: 100%;
+
+	position: absolute;
+	bottom: 48px;
+`
