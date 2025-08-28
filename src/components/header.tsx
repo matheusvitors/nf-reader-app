@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Feather from '@react-native-vector-icons/feather';
 import styled, { useTheme } from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import { useSystemTheme } from '@/hooks';
 import { RootStackScreenProps } from '@/Router';
+import { permissions } from '@/config/permissions';
 
 interface HeaderProps {
 	title?: string;
@@ -13,11 +14,18 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ title = 'NF Reader', intialPage = false}) => {
 	const theme = useTheme();
 	const { theme: systemTheme, changeTheme } = useSystemTheme();
-	const navigation = useNavigation<RootStackScreenProps>()
+	const navigation = useNavigation<RootStackScreenProps>();
+
+	const [hasPermission, setHasPermission] = useState(false);
+
+	useEffect(() => {
+		(async () => {setHasPermission(await permissions.verify())})();
+	}, [])
 
 	return (
 		<Container>
 			<Left>
+				{!hasPermission && intialPage && <Feather name='camera-off' size={26} color={theme.semantic.warning} onPress={async () => {await permissions.request(); setHasPermission(await permissions.verify())}}/>}
 				{!intialPage && <Feather name='arrow-left' size={26} color={theme.common.text} onPress={() => navigation.goBack()}/>}
 			</Left>
 			<Center>
@@ -69,6 +77,7 @@ const Right = styled.View`
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	flex-direction: row;
 
 	width: 15%;
 	height: 50px;

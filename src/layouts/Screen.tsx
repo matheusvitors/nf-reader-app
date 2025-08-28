@@ -1,5 +1,6 @@
 import { Header } from '@/components';
-import React, { ReactNode } from 'react';
+import { permissions } from '@/config/permissions';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled, { css, useTheme } from 'styled-components/native';
@@ -11,19 +12,27 @@ interface ScreenProps {
 }
 
 export const Screen: React.FC<ScreenProps> = ({children, title, initialPage = false}) => {
-	const insets = useSafeAreaInsets();
 	const theme = useTheme();
+
+	const [hasPermission, setHasPermission] = useState(false);
+
+	useEffect(() => {
+		verifyPermission();
+	}, [])
+
+	const verifyPermission = async () => {
+		try {
+			setHasPermission(await permissions.verify())
+		} catch (error) {
+			console.error(error);
+		}
+	}
 
 	return (
 		<SafeAreaView style={{
 			flex: 1,
 			justifyContent: 'flex-start',
 			alignItems: 'center',
-			// marginBottom: insets.bottom,
-			// paddingTop: insets.top,
-			// paddingBottom: insets.bottom,
-			// paddingLeft: insets.left,
-			// paddingRight: insets.right,
 			backgroundColor: theme.common.background
 		}}>
 			<Header title={title} intialPage={initialPage} />
@@ -32,7 +41,6 @@ export const Screen: React.FC<ScreenProps> = ({children, title, initialPage = fa
 		</SafeAreaView >
 	);
 }
-
 
 const Footer = styled.View`
 

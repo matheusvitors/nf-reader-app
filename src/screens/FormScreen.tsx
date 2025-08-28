@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import styled from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 import { Screen } from "@/layouts";
 import { RootStackParamsList, RootStackScreenProps } from "@/Router";
-import { Button, QRCodeButton, Text, TextInput } from "@/components";
+import { Button, QRCodeButton, QrCodeScanner, Text, TextInput } from "@/components";
 import { Alert } from "react-native";
 import { createNotaFiscal, editNotaFiscal } from "@/services";
 import { NotaFiscal } from "@/interfaces";
@@ -14,16 +14,26 @@ import { format } from "date-fns";
 export const FormScreen: React.FC = () => {
 	const navigation = useNavigation<RootStackScreenProps>();
 	const { params } = useRoute<RouteProp<RootStackParamsList, "Form">>();
-	const defaultStyles = useDefaultStyles();
+	const theme = useTheme();
+	const defaultStyles = useDefaultStyles(theme.name);
 
 	const [description, setDescription] = useState(params?.description || "");
 	const [link, setLink] = useState(params?.link || "");
 	const [data, setData] = useState<Date>(params?.data ? new Date(params.data) : new Date());
 	const [isLoading, setIsLoading] = useState(false);
+	const [showCamera, setShowCamera] = useState(false);
 
 	useEffect(() => {
 		console.log('data', data?.toLocaleDateString())
 	}, [data])
+
+	useEffect(() => {
+		link.length > 0 && setShowCamera(false);
+	}, [])
+
+	useEffect(() => {
+		showCamera && setLink('');
+	}, [showCamera])
 
 	const handleSave = async () => {
 		try {
@@ -49,6 +59,11 @@ export const FormScreen: React.FC = () => {
 		}
 	};
 
+	const onReadCode = (value: string) => {
+		console.log('qr-code', value);
+		setLink(value)
+	}
+
 	return (
 		<Screen title='Formulário'>
 			<Content>
@@ -67,13 +82,16 @@ export const FormScreen: React.FC = () => {
 						<Item>{link}</Item>
 					</LinkInfo>
 					<ActionLink>
-						<QRCodeButton onPress={() => {}} />
+						<QRCodeButton onPress={() => setShowCamera(!showCamera)} />
 					</ActionLink>
 				</LinkField>
 			</Content>
 			<Footer>
 				<Button label='salvar' onPress={handleSave} loading={isLoading} />
 			</Footer>
+			{showCamera &&
+				<QrCodeScanner setIsCameraShown={setShowCamera} onReadCode={onReadCode} />
+			}
 		</Screen>
 	);
 };

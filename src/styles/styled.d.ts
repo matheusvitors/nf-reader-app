@@ -7,7 +7,7 @@ import { StatusBarStyle } from 'react-native';
 
 declare module 'styled-components/native' {
     export interface DefaultTheme {
-		name: string,
+		name: 'dark' | 'light',
 		statusBar: StatusBarStyle;
 
 		colors: {

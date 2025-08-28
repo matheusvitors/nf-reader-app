@@ -6,6 +6,7 @@ import { Screen } from "@/layouts";
 import { listNotasFiscais } from "@/services";
 import { Button, EmptyArea, ListItem, Loader, NewNFButton, ScreenMessage } from "@/components";
 import { NotaFiscal } from "@/interfaces";
+import { permissions } from "@/config/permissions";
 
 /**
  *
@@ -25,8 +26,16 @@ export const HomeScreen: React.FC = () => {
 	});
 
 	useEffect(() => {
+		!hasPermission() && permissions.request();
+	}, [])
+
+	useEffect(() => {
 		error && console.log(error)
-	}, [error])
+	}, [error]);
+
+	const hasPermission = async () => {
+		return await permissions.verify();
+	}
 
 	const handleDelete = async (id: string) => {
 		try {
