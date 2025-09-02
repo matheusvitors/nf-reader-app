@@ -1,15 +1,12 @@
 import { StatusBarStyle } from "react-native"
 
-const primary = '#062460'
-const secondary = '#0A5F2E'
+const primary = '#220081ff'
+const secondary = '#D9ED92'
 const accent = '#93938C'
-// const primary = '#184E77'
-// const secondary = '#34A0A4'
-// const accent = '#D9ED92'
 const black = '#141414'
 const white = '#fcfcfc'
 
-const light = {
+export const light = {
 	name: 'light',
 	statusBar: 'dark-content' as StatusBarStyle,
 
@@ -33,6 +30,8 @@ const light = {
 		info: '#3185FC'
 	},
 
+	icon: '#EDC531',
+
 	button: {
 		background: primary,
 		text: white,
@@ -43,7 +42,7 @@ const light = {
 	},
 
 	card: {
-		background: white,
+		background: '#e9e9e9ff',
 		text: black,
 	},
 
@@ -53,5 +52,3 @@ const light = {
 		text: black,
 	},
 }
-
-export default light;

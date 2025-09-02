@@ -1,12 +1,12 @@
 import { StatusBarStyle } from "react-native"
 
-const primary = '#F2F3AE'
-const secondary = '#D58936'
-const accent = '#A44200'
+const primary = '#194bf1ff'
+const secondary = '#D9ED92'
+const accent = '#93938C'
 const black = '#0d0d0d'
 const white = '#fcfcfc'
 
-const dark = {
+export const dark = {
 	name: 'dark',
 	statusBar: 'light-content' as StatusBarStyle,
 
@@ -25,10 +25,12 @@ const dark = {
 
 	semantic: {
 		success: '#46B93C',
-		attention: '#218aa4',
-		warning: '#C92020',
+		attention: '#f8fc01',
+		warning: '#f71919ff',
 		info: accent
 	},
+
+	icon: '#6a00b1ff',
 
 	button: {
 		background: primary,
@@ -40,8 +42,8 @@ const dark = {
 	},
 
 	card: {
-		background: white,
-		text: black,
+		background: '#0b0f31ff',
+		text: white,
 	},
 
 	textInput: {
@@ -50,5 +52,3 @@ const dark = {
 		text: white,
 	},
 }
-
-export default dark;
