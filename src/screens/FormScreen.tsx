@@ -24,10 +24,6 @@ export const FormScreen: React.FC = () => {
 	const [showCamera, setShowCamera] = useState(false);
 
 	useEffect(() => {
-		console.log('data', data?.toLocaleDateString())
-	}, [data])
-
-	useEffect(() => {
 		link.length > 0 && setShowCamera(false);
 	}, [])
 
@@ -37,8 +33,6 @@ export const FormScreen: React.FC = () => {
 
 	const handleSave = async () => {
 		try {
-			console.log("data", format(data, 'yyyy-MM-dd'));
-
 			if(data) {
 				setIsLoading(true);
 				const input: NotaFiscal = {
@@ -60,7 +54,6 @@ export const FormScreen: React.FC = () => {
 	};
 
 	const onReadCode = (value: string) => {
-		console.log('qr-code', value);
 		setLink(value)
 	}
 

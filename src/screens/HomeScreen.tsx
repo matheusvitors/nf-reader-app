@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import { FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, FlatList } from "react-native";
 import styled from "styled-components/native";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Screen } from "@/layouts";
-import { listNotasFiscais } from "@/services";
+import { listNotasFiscais, removeNotaFiscal } from "@/services";
 import { Button, EmptyArea, ListItem, Loader, NewNFButton, ScreenMessage } from "@/components";
 import { NotaFiscal } from "@/interfaces";
 import { permissions } from "@/config/permissions";
@@ -24,13 +24,17 @@ export const HomeScreen: React.FC = () => {
 		queryKey: ["notasFiscais"],
 		queryFn: listNotasFiscais,
 	});
+	const queryClient = useQueryClient();
+
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		!hasPermission() && permissions.request();
 	}, [])
 
 	useEffect(() => {
-		error && console.log(error)
+		error && console.error(error);
+		error && Alert.alert('Erro!', error.message)
 	}, [error]);
 
 	const hasPermission = async () => {
@@ -39,10 +43,24 @@ export const HomeScreen: React.FC = () => {
 
 	const handleDelete = async (id: string) => {
 		try {
-			console.log('delete', id);
+			Alert.alert("Excluir", "Deseja excluir esta nota fiscal?", [
+				{ text: "Cancelar", style: "cancel" },
+				{
+					text: "OK",
+					onPress: async () => {
+						setIsLoading(true);
+						await removeNotaFiscal(id);
+						queryClient.invalidateQueries({ queryKey: ['notasFiscais'] });
+						Alert.alert("Sucesso!", "Nota fiscal excluída com sucesso!");
+						setIsLoading(false);
+					},
+				},
+			]);
 
-		} catch (error) {
-			console.error(error);
+		} catch (error: any) {
+			Alert.alert('Erro!', error.message)
+		} finally {
+			setIsLoading(false);
 		}
 	}
 
@@ -56,14 +74,14 @@ export const HomeScreen: React.FC = () => {
 						data={notasFiscais}
 						renderItem={({item}) => <ListItem item={item} handleDelete={handleDelete} />}
 						keyExtractor={(item: NotaFiscal) => `${item.id}`}
-						refreshing={isFetching}
+						refreshing={isFetching || isLoading}
 						onRefresh={refetch}
 						style={{ marginTop: 10, marginBottom: 10, flex: 1, width:'100%' }}
 						contentContainerStyle={{flex: 1, alignItems: 'center'}}
 					/>
 				}
 
-				{!isFetching && !notasFiscais && <EmptyArea>
+				{!(isFetching || isLoading) && !notasFiscais && <EmptyArea>
 					<ScreenMessage message='Não há notas fiscais cadastradas.' Button={<Button type='outline' label='Atualizar' loading={isFetching} onPress={refetch} />} />
 				</EmptyArea> }
 				<NewNFButton />
