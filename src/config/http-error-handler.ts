@@ -32,5 +32,6 @@ export const httpErrorHandler = (error: any): HttpError => {
 	}
 
 	// console.error(`[HTTP-ERROR-HANDLER] [${from}] => `, error, errorType, error.message);
+	console.error('[Failed request] => ', JSON.stringify(error.request))
 	return errorType;
 }

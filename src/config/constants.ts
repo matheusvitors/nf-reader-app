@@ -1,1 +1,1 @@
-export const PATH = '/nf'
+export const PATH = 'nf'

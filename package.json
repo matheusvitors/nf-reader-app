@@ -1,6 +1,6 @@
 {
 	"name": "nfreader",
-	"version": "v1",
+	"version": "v1 (2025-11-23)",
 	"private": true,
 	"scripts": {
 		"android": "react-native run-android",
