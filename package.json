@@ -6,6 +6,8 @@
 		"android": "react-native run-android",
 		"android:mac": "react-native run-android",
 		"android:release": "react-native run-android --mode=release",
+		"android:pair": "adb pair",
+		"android:connect": "adb connect",
 		"build:android:aab": "cd android && gradlew bundleRelease && cd app/build/outputs/bundle/release && explorer .",
 		"build:android:apk": "cd android && gradlew assembleRelease && cd app/build/outputs/apk/release && explorer .",
 		"ios": "react-native run-ios",
