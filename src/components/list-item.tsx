@@ -22,7 +22,7 @@ export const ListItem: React.FC<ListItemProps> = ({ item, handleDelete }) => {
 					<Info>{item.description}</Info>
 				</Top>
 				<Down>
-					<Info>{item.link}</Info>
+					<Info>{item.link.length > 30 ? item.link.slice(0, 30) + '...' : item.link}</Info>
 				</Down>
 			</Informations>
 			<Actions>

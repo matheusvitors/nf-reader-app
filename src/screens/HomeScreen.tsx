@@ -81,7 +81,8 @@ export const HomeScreen: React.FC = () => {
 					/>
 				}
 
-				{!(isFetching || isLoading) && (!notasFiscais || notasFiscais.length === 0) && <EmptyArea>
+				{!(isFetching || isLoading) && (!notasFiscais || notasFiscais.length === 0) &&
+				<EmptyArea>
 					<ScreenMessage message='Não há notas fiscais cadastradas.' Button={<Button type='outline' label='Atualizar' loading={isFetching} onPress={refetch} />} />
 				</EmptyArea> }
 				<NewNFButton />

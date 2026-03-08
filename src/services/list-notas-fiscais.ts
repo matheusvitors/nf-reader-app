@@ -1,5 +1,4 @@
 import { PATH } from "@/config/constants"
-import { http } from "@/config/http"
 import { httpErrorHandler } from "@/config/http-error-handler";
 import { KEY } from "@/config/storage-keys";
 import { NotaFiscal } from "@/interfaces";
